@@ -1,0 +1,28 @@
+# Ignore Eclipse metadata
+.metadata/
+Servers/
+.settings/
+.classpath
+.project
+
+# Ignore compiled class files
+build/
+bin/
+*.class
+
+# Ignore IDE specific files
+.idea/
+*.iml
+*.iws
+
+# Ignore OS specific files
+.DS_Store
+Thumbs.db
+
+# Ignore packaged archives
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
