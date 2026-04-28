@@ -1,6 +1,0 @@
-.git
-.gitignore
-*.md
-node_modules
-build
-*.class
