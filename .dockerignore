@@ -33,4 +33,9 @@ mvnw
 mvnw.cmd
 
 # Logs
+
+
+target/
+.git/
+.env
 *.log

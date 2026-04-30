@@ -5,14 +5,14 @@ FROM maven:3.8.4-openjdk-11-slim AS build
 
 WORKDIR /app
 
-# Step 1: Copy only pom.xml (cache dependencies)
+# Cache dependencies
 COPY pom.xml .
 RUN mvn dependency:go-offline -B
 
-# Step 2: Copy full project (forces rebuild if code changes)
+# Copy full project
 COPY . .
 
-# Step 3: Clean + build fresh WAR (NO CACHE ISSUE)
+# Build WAR
 RUN mvn clean package -DskipTests
 
 # ==========================================
@@ -22,14 +22,20 @@ FROM tomcat:10.1-jdk11
 
 ENV TZ=Asia/Kolkata
 
-# Remove default apps
+# Clean default apps
 RUN rm -rf /usr/local/tomcat/webapps/*
 
-# Copy fresh WAR
-COPY --from=build /app/target/DriveZone.war /usr/local/tomcat/webapps/ROOT.war
+# Copy WAR (not renamed yet)
+COPY --from=build /app/target/DriveZone.war /usr/local/tomcat/webapps/
 
-# Ensure uploads directory exists
-RUN mkdir -p /usr/local/tomcat/webapps/ROOT/uploads
+# 🔥 FORCE extraction (CRITICAL FIX)
+RUN cd /usr/local/tomcat/webapps && \
+    mv DriveZone.war ROOT.war && \
+    jar -xf ROOT.war && \
+    rm ROOT.war
+
+# Ensure uploads directory exists (for runtime)
+RUN mkdir -p /usr/local/tomcat/webapps/uploads
 
 EXPOSE 8080
 
