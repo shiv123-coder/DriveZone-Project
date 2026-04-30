@@ -12,19 +12,21 @@ public class DBConnection {
 
     public static Connection getConnection() {
         try {
+            if (URL == null || USER == null || PASS == null) {
+                throw new RuntimeException("❌ Environment variables not set properly!");
+            }
+
             Class.forName("com.mysql.cj.jdbc.Driver");
 
             Connection con = DriverManager.getConnection(URL, USER, PASS);
+
             System.out.println("✅ Database Connected Successfully!");
             return con;
 
         } catch (ClassNotFoundException e) {
-            System.err.println("❌ Driver Error: " + e.getMessage());
+            throw new RuntimeException("❌ MySQL Driver not found!", e);
         } catch (SQLException e) {
-            System.err.println("❌ DB Error: " + e.getMessage());
-            System.err.println("URL: " + URL);
-            System.err.println("USER: " + USER);
+            throw new RuntimeException("❌ Database Connection Failed! Check ENV variables.", e);
         }
-        return null;
     }
 }
