@@ -1,23 +1,49 @@
-# Ignore Eclipse metadata
-.metadata/
-Servers/
-.settings/
-.classpath
-.project
-
-# Ignore compiled class files
-build/
-bin/
-*.class
+# Ignore Maven build artifacts
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+vn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
 
 # Ignore IDE specific files
 .idea/
 *.iml
 *.iws
+*.ipr
+.settings/
+.project
+.classpath
+.factorypath
+.metadata/
+Servers/
+bin/
+build/
+*.class
+DEPLOYMENT_GUIDE.md
+Deployment.md
 
 # Ignore OS specific files
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
+
+# Ignore secrets and environment variables
+.env
+.env.local
+.env.*.local
+
+# Ignore logs
+*.log
+logs/
 
 # Ignore packaged archives
 *.jar
@@ -27,6 +53,10 @@ Thumbs.db
 *.tar.gz
 *.rar
 
+# Ignore user uploads in local dev
+Drive_zone/src/main/webapp/uploads/*
+!Drive_zone/src/main/webapp/uploads/.gitkeep
+
+# Project specific documentation
 WT-miniproject-report_format.docx
-Deployment.md
 DBMS_Mini_Project___Tourism_Management_System.pdf

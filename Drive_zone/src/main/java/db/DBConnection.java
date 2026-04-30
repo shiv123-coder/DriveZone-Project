@@ -5,20 +5,26 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DBConnection {
-    private static final String URL  = System.getenv("DB_URL") != null ? System.getenv("DB_URL") : "jdbc:mysql://localhost:3307/car_management?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
-    private static final String USER = System.getenv("DB_USER") != null ? System.getenv("DB_USER") : "root";
-    private static final String PASS = System.getenv("DB_PASS") != null ? System.getenv("DB_PASS") : ""; 
+
+    private static final String URL = System.getenv("DB_URL");
+    private static final String USER = System.getenv("DB_USER");
+    private static final String PASS = System.getenv("DB_PASS");
 
     public static Connection getConnection() {
-        Connection con = null;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection(URL, USER, PASS);
+
+            Connection con = DriverManager.getConnection(URL, USER, PASS);
+            System.out.println("✅ Database Connected Successfully!");
+            return con;
+
         } catch (ClassNotFoundException e) {
-            System.err.println("Database Driver not found: " + e.getMessage());
+            System.err.println("❌ Driver Error: " + e.getMessage());
         } catch (SQLException e) {
-            System.err.println("Database Connection Failed: " + e.getMessage());
+            System.err.println("❌ DB Error: " + e.getMessage());
+            System.err.println("URL: " + URL);
+            System.err.println("USER: " + USER);
         }
-        return con;
+        return null;
     }
 }

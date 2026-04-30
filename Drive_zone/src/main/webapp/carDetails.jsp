@@ -10,11 +10,20 @@
     return;
   }
   String userName = (String) session.getAttribute("user");
-  String carId = request.getParameter("id");
   if(carId == null) {
     response.sendRedirect("home.jsp");
     return;
   }
+%>
+<%!
+    public String esc(String value) {
+        if (value == null) return "";
+        return value.replace("&", "&amp;")
+                    .replace("<", "&lt;")
+                    .replace(">", "&gt;")
+                    .replace("\"", "&quot;")
+                    .replace("'", "&#39;");
+    }
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -140,30 +149,30 @@
     %>
     <div class="detail-card">
       <div class="detail-img">
-        <img src="uploads/<%= rs.getString("image") %>" alt="<%= rs.getString("brand") %>"
+        <img src="uploads/<%= esc(rs.getString("image")) %>" alt="<%= esc(rs.getString("brand")) %>"
              onerror="this.src='https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=800';">
       </div>
       <div class="detail-info">
         <% if(isSold) { %>
           <div class="badge-sold"><i class="fa-solid fa-tag"></i> SOLD</div>
         <% } %>
-        <div class="brand"><%= rs.getString("brand") %></div>
-        <div class="model"><%= rs.getString("model") %></div>
-        <div class="price"><%= formattedPrice %></div>
+        <div class="brand"><%= esc(rs.getString("brand")) %></div>
+        <div class="model"><%= esc(rs.getString("model")) %></div>
+        <div class="price"><%= esc(formattedPrice) %></div>
         
         <div class="meta-grid">
-          <div class="meta-item"><i class="fa-solid fa-gas-pump"></i> <span><%= rs.getString("fuel_type") %></span></div>
+          <div class="meta-item"><i class="fa-solid fa-gas-pump"></i> <span><%= esc(rs.getString("fuel_type")) %></span></div>
           <div class="meta-item"><i class="fa-solid fa-shield-check"></i> <span>Certified</span></div>
           <div class="meta-item"><i class="fa-solid fa-calendar"></i> <span>2026 Edition</span></div>
           <div class="meta-item"><i class="fa-solid fa-road"></i> <span>0-PDI</span></div>
         </div>
         
-        <p class="desc"><%= rs.getString("description") %></p>
+        <p class="desc"><%= esc(rs.getString("description")) %></p>
         
         <div class="enquiry-section">
           <h3>Enquire About This Vehicle</h3>
           <form action="EnquiryServlet" method="post">
-            <input type="hidden" name="car_id" value="<%= carId %>">
+            <input type="hidden" name="car_id" value="<%= esc(carId) %>">
             <div class="fgroup">
               <label>Your Name</label>
               <input type="text" name="name" required placeholder="Full Name">

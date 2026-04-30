@@ -3,8 +3,8 @@
 -- 2. Click "SQL" tab
 -- 3. Paste and Run the following:
 
-CREATE DATABASE IF NOT EXISTS car_management;
-USE car_management;
+--- CREATE DATABASE IF NOT EXISTS car_management;
+---USE car_management;
 
 CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,

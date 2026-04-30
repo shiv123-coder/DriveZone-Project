@@ -1143,6 +1143,9 @@
                 <span class="action-btn action-del" onclick="confirmDelete('<%= id %>')" title="Delete Vehicle" style="cursor:pointer;">
                   <i class="fa-solid fa-trash-can"></i>
                 </span>
+                <form id="deleteForm-<%= id %>" action="DeleteServlet" method="POST" style="display:none;">
+                  <input type="hidden" name="id" value="<%= id %>">
+                </form>
               </td>
             </tr>
 <%
@@ -1261,7 +1264,7 @@
                 </span>
               </td>
               <td style="text-align:right;">
-                <form action="UpdateStatusServlet" method="GET" style="display:inline-block; margin-right: 5px;">
+                <form action="UpdateStatusServlet" method="POST" style="display:inline-block; margin-right: 5px;">
                   <input type="hidden" name="id" value="<%= enquiryId %>">
                   <select name="status" onchange="this.form.submit()" style="font-size:0.75rem; padding: 2px 4px; border-radius: 4px; border:1px solid var(--border); background: var(--card-bg); color: var(--text);">
                     <option value="" disabled selected>Change Status</option>
@@ -1273,6 +1276,9 @@
                 <span class="action-btn action-del" onclick="confirmDeleteEnquiry('<%= enquiryId %>')" title="Delete Enquiry" style="cursor:pointer; width:28px; height:28px; font-size:0.75rem;">
                   <i class="fa-solid fa-trash-can"></i>
                 </span>
+                <form id="deleteEnquiryForm-<%= enquiryId %>" action="DeleteEnquiryServlet" method="POST" style="display:none;">
+                  <input type="hidden" name="id" value="<%= enquiryId %>">
+                </form>
               </td>
             </tr>
 <%
@@ -1326,7 +1332,7 @@ function confirmDelete(id) {
         borderRadius: '16px'
     }).then(function(r) {
         if (r.isConfirmed) {
-            window.location.href = 'DeleteServlet?id=' + id;
+            document.getElementById('deleteForm-' + id).submit();
         }
     });
 }
@@ -1346,7 +1352,7 @@ function confirmDeleteEnquiry(id) {
         reverseButtons: true
     }).then(function(r) {
         if (r.isConfirmed) {
-            window.location.href = 'DeleteEnquiryServlet?id=' + id;
+            document.getElementById('deleteEnquiryForm-' + id).submit();
         }
     });
 }

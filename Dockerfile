@@ -1,31 +1,34 @@
-# =========================
-# Build Stage
-# =========================
-FROM maven:3.8.4-openjdk-11 AS build
+# ==========================================
+# Stage 1: Build
+# ==========================================
+FROM maven:3.8.4-openjdk-11-slim AS build
 
 WORKDIR /app
 
-COPY pom.xml .
-COPY src ./src
+# Copy everything (IMPORTANT for your structure)
+COPY . .
 
+# Download dependencies
+RUN mvn dependency:go-offline -B
+
+# Build WAR
 RUN mvn clean package -DskipTests
 
+# ==========================================
+# Stage 2: Run
+# ==========================================
+FROM tomcat:10.1-jdk11-slim
 
-# =========================
-# Runtime Stage
-# =========================
-FROM tomcat:10.1-jdk11
+ENV TZ=Asia/Kolkata
 
 # Clean default apps
 RUN rm -rf /usr/local/tomcat/webapps/*
 
-# Deploy WAR
+# Copy WAR
 COPY --from=build /app/target/DriveZone.war /usr/local/tomcat/webapps/ROOT.war
 
-# Fix timezone (important for DB apps)
-RUN apt-get update && apt-get install -y tzdata
-
-ENV TZ=Asia/Kolkata
+# Ensure uploads folder exists
+RUN mkdir -p /usr/local/tomcat/webapps/ROOT/uploads
 
 EXPOSE 8080
 

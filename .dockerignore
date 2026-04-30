@@ -1,0 +1,36 @@
+# Version Control
+.git
+.github
+.gitignore
+
+# Build Artifacts
+target/
+*.war
+*.jar
+*.class
+
+# IDEs
+.idea/
+.vscode/
+*.iml
+.project
+.classpath
+.settings/
+
+# Secrets
+.env
+.env.example
+*.pdf
+*.docx
+
+# Docker
+Dockerfile
+.dockerignore
+
+# Maven
+.mvn/
+mvnw
+mvnw.cmd
+
+# Logs
+*.log

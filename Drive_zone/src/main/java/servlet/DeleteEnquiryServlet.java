@@ -11,7 +11,7 @@ import db.DBConnection;
 
 public class DeleteEnquiryServlet extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String idStr = request.getParameter("id");
         if (idStr != null) {
             try (Connection con = DBConnection.getConnection();

@@ -19,8 +19,9 @@ if ("POST".equalsIgnoreCase(request.getMethod())) {
         alertIcon = "error";
         alertTitle = "Missing Details";
         alertText = "Please enter email or username and password.";
-    } else if ("SSP".equals(emailOrUsername) && "123456".equals(password)) {
-        session.setAttribute("user", "SSP");
+    } else if (System.getenv("ADMIN_USER") != null && System.getenv("ADMIN_PASS") != null && 
+               System.getenv("ADMIN_USER").equals(emailOrUsername) && System.getenv("ADMIN_PASS").equals(password)) {
+        session.setAttribute("user", System.getenv("ADMIN_USER"));
         session.setAttribute("role", "admin");
         alertIcon = "success";
         alertTitle = "Welcome Admin!";
@@ -517,9 +518,9 @@ document.addEventListener('DOMContentLoaded', updateThemeIcon);
 <% if (alertIcon != null) { %>
 <script>
 Swal.fire({
-    icon: '<%= alertIcon %>',
-    title: '<%= alertTitle %>',
-    text: '<%= alertText %>',
+    icon: '<%= alertIcon != null ? alertIcon.replace("'", "\\'") : "" %>',
+    title: '<%= alertTitle != null ? alertTitle.replace("'", "\\'") : "" %>',
+    text: '<%= alertText != null ? alertText.replace("'", "\\'") : "" %>',
     background: '#0f172a',
     color: '#f1f5f9',
     confirmButtonColor: '#0ea5e9',

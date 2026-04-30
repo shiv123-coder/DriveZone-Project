@@ -11,9 +11,18 @@
         return;
     }
 
-    String userName = (String) session.getAttribute("user");
     if (userName == null) {
         userName = "User";
+    }
+%>
+<%!
+    public String esc(String value) {
+        if (value == null) return "";
+        return value.replace("&", "&amp;")
+                    .replace("<", "&lt;")
+                    .replace(">", "&gt;")
+                    .replace("\"", "&quot;")
+                    .replace("'", "&#39;");
     }
 %>
 
@@ -1247,23 +1256,23 @@
             boolean isNew = cardIndex <= 3;
 %>
     <div class="card"
-         data-fuel="<%= fuelLower %>"
-         data-brand="<%= brand.toLowerCase() %>"
-         data-model="<%= model.toLowerCase() %>"
+         data-fuel="<%= esc(fuelLower) %>"
+         data-brand="<%= esc(brand.toLowerCase()) %>"
+         data-model="<%= esc(model.toLowerCase()) %>"
          data-price="<%= priceValue %>"
          onclick="goToDetails(<%= carId %>)">
 
       <div class="card-img">
-        <span class="fuel-badge <%= fuelClass %>">
-          <i class="fa-solid fa-gas-pump"></i> <%= (fuel != null && !fuel.trim().isEmpty()) ? fuel : "N/A" %>
+        <span class="fuel-badge <%= esc(fuelClass) %>">
+          <i class="fa-solid fa-gas-pump"></i> <%= (fuel != null && !fuel.trim().isEmpty()) ? esc(fuel) : "N/A" %>
         </span>
 
         <div class="fav-btn">
           <i class="fa-regular fa-heart"></i>
         </div>
 
-        <img src="<%= imagePath %>"
-             alt="<%= brand %>"
+        <img src="<%= esc(imagePath) %>"
+             alt="<%= esc(brand) %>"
              onerror="this.src='https://via.placeholder.com/600x400?text=No+Image+Available';"
              loading="lazy">
 
@@ -1277,17 +1286,17 @@
       </div>
 
       <div class="card-body">
-        <div class="card-brand"><%= brand.toUpperCase() %></div>
-        <div class="card-name"><%= brand %> <%= model %></div>
-        <div class="card-price"><%= formattedPrice %></div>
+        <div class="card-brand"><%= esc(brand.toUpperCase()) %></div>
+        <div class="card-name"><%= esc(brand) %> <%= esc(model) %></div>
+        <div class="card-price"><%= esc(formattedPrice) %></div>
 
         <div class="card-specs">
-          <div class="spec-item"><i class="fa-solid fa-gas-pump"></i> <%= (fuel != null && !fuel.trim().isEmpty()) ? fuel : "N/A" %></div>
+          <div class="spec-item"><i class="fa-solid fa-gas-pump"></i> <%= (fuel != null && !fuel.trim().isEmpty()) ? esc(fuel) : "N/A" %></div>
           <div class="spec-item"><i class="fa-solid fa-shield-halved"></i> Verified</div>
           <div class="spec-item"><i class="fa-solid fa-star"></i> Premium</div>
         </div>
 
-        <p class="card-desc"><%= (desc != null && !desc.trim().isEmpty()) ? desc : "A premium vehicle from our exclusive collection." %></p>
+        <p class="card-desc"><%= (desc != null && !desc.trim().isEmpty()) ? esc(desc) : "A premium vehicle from our exclusive collection." %></p>
 
         <div class="card-footer">
           <a href="carDetails.jsp?id=<%= carId %>" class="card-cta" onclick="event.stopPropagation();">
@@ -1473,12 +1482,12 @@
                 }
 %>
       <div class="enq-list-item">
-        <img src="uploads/<%= enqImage %>" class="enq-car-img" alt="Car" onerror="this.src='https://via.placeholder.com/80x50?text=N/A';">
+        <img src="uploads/<%= esc(enqImage) %>" class="enq-car-img" alt="Car" onerror="this.src='https://via.placeholder.com/80x50?text=N/A';">
         <div class="enq-info">
-          <div class="enq-car-name"><%= enqBrand %> <%= enqModel %></div>
-          <div class="enq-msg"><%= enqMessage %></div>
+          <div class="enq-car-name"><%= esc(enqBrand) %> <%= esc(enqModel) %></div>
+          <div class="enq-msg"><%= esc(enqMessage) %></div>
         </div>
-        <div class="enq-status <%= enqStCls %>"><%= (enqStatus != null && !enqStatus.trim().isEmpty()) ? enqStatus : "Pending" %></div>
+        <div class="enq-status <%= esc(enqStCls) %>"><%= (enqStatus != null && !enqStatus.trim().isEmpty()) ? esc(enqStatus) : "Pending" %></div>
       </div>
 <%
             }
