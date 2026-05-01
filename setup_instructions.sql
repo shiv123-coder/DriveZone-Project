@@ -59,3 +59,16 @@ CREATE TABLE IF NOT EXISTS enquiries (
 
 INSERT INTO enquiries (car_id, user_name, user_email, message, status) VALUES
 (1,'Shiv Mali','shivashankrmali7@gmail.com','Interested in car','Pending');
+
+--- for deployed db access 
+''' mysql -h drivezone-db-shivashankrmali7-a1b2.l.aivencloud.com -P 20314 -u avnadmin -p --ssl-mode=REQUIRED defaultdb
+
+SHOW TABLES;
+
+SOURCE D:/~Projects/Mini Project/Mini-Project-WT/setup_instructions.sql;
+
+SELECT * FROM users;
+
+SELECT * FROM enquiries;
+
+SELECT * FROM cars;'''
