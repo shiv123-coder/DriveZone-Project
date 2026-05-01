@@ -8,7 +8,7 @@ import jakarta.servlet.http.*;
 
 public class UpdateStatusServlet extends HttpServlet {
 
-    @Override
+    // ✅ FIX: allow GET requests
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         doPost(request, response);
@@ -35,6 +35,7 @@ public class UpdateStatusServlet extends HttpServlet {
             ps.executeUpdate();
 
             response.sendRedirect("admin.jsp?updated=true");
+
         } catch (Exception e) {
             e.printStackTrace();
             response.sendRedirect("admin.jsp?error=true");
