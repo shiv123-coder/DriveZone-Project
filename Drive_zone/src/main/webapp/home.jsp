@@ -11,9 +11,13 @@
         return;
     }
 
+    String userName = (String) session.getAttribute("user");
+
     if (userName == null) {
         userName = "User";
     }
+
+    
 %>
 <%!
     public String esc(String value) {
