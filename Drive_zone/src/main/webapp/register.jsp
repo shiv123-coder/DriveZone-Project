@@ -261,6 +261,8 @@
 </style>
 </head>
 <body>
+<%@ include file="preloader.jsp" %>
+
 
 <button onclick="toggleTheme()" title="Toggle Theme"
   style="position:absolute; top:20px; right:20px; z-index:100; background:var(--card-bg); border:1px solid var(--border); border-radius:50%; width:44px; height:44px; color:var(--text); cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 12px rgba(0,0,0,0.1);">

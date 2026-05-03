@@ -838,6 +838,8 @@
 </style>
 </head>
 <body>
+<%@ include file="preloader.jsp" %>
+
 
 <aside class="sidebar">
   <a href="#" class="sidebar-logo">

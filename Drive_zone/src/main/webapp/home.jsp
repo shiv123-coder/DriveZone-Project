@@ -1050,6 +1050,8 @@
 </style>
 </head>
 <body>
+<%@ include file="preloader.jsp" %>
+
 
 <nav class="navbar" id="navbar">
   <a class="logo" href="#home">

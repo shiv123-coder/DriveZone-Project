@@ -115,6 +115,8 @@
 </style>
 </head>
 <body>
+<%@ include file="preloader.jsp" %>
+
   <nav class="navbar">
     <a class="logo" href="home.jsp">
       <div class="logo-icon"><i class="fa-solid fa-car-side"></i></div>

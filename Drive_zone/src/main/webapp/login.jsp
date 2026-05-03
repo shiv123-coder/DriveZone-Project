@@ -422,6 +422,8 @@ if ("POST".equalsIgnoreCase(request.getMethod())) {
 </style>
 </head>
 <body>
+<%@ include file="preloader.jsp" %>
+
 
 <button type="button" onclick="toggleTheme()" title="Toggle Theme" class="theme-btn">
     <i class="fa-solid fa-moon" id="themeIcon"></i>

@@ -369,6 +369,8 @@
 </style>
 </head>
 <body>
+<%@ include file="preloader.jsp" %>
+
 
 <button type="button" class="theme-btn" onclick="toggleTheme()" title="Toggle Theme">
   <i class="fa-solid fa-moon" id="themeIcon"></i>
