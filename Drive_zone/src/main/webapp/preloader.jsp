@@ -1,141 +1,191 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%-- 
-    Global Preloader Component
-    Requirements:
-    1. Only runs in production (non-localhost)
-    2. Premium, smooth animation
-    3. Hides when page is fully loaded
-    4. Seamless exit transition
+    Advanced Global Preloader Component
+    Features:
+    1. Production-only hostname detection
+    2. Premium Animated Gradient Background
+    3. Floating Car Logo Animation
+    4. Shimmer & Glow Effects
+    5. Blur-to-Clear Exit Transition
 --%>
 <style>
     :root {
-        --preloader-bg: #0f172a;
-        --preloader-accent: #3b82f6;
-        --preloader-text: #f8fafc;
+        --pl-bg-1: #0f172a;
+        --pl-bg-2: #1e293b;
+        --pl-accent: #3b82f6;
+        --pl-glow: rgba(59, 130, 246, 0.5);
+        --pl-text: #f8fafc;
     }
 
     [data-theme="light"] {
-        --preloader-bg: #ffffff;
-        --preloader-accent: #1a56db;
-        --preloader-text: #1e293b;
+        --pl-bg-1: #f8fafc;
+        --pl-bg-2: #f1f5f9;
+        --pl-accent: #1a56db;
+        --pl-glow: rgba(26, 86, 219, 0.3);
+        --pl-text: #1e293b;
     }
 
-    .preloader-overlay {
+    /* Full screen overlay with animated gradient */
+    .pl-overlay {
         position: fixed;
         inset: 0;
         width: 100%;
         height: 100%;
-        background: var(--preloader-bg);
+        background: linear-gradient(-45deg, var(--pl-bg-1), var(--pl-bg-2), var(--pl-bg-1));
+        background-size: 400% 400%;
+        animation: pl-gradient 15s ease infinite;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        z-index: 99999;
-        transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.6s;
-        backdrop-filter: blur(10px);
+        z-index: 100000;
+        transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), 
+                    transform 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+                    visibility 0.8s;
     }
 
-    .preloader-overlay.preloader-hidden {
+    @keyframes pl-gradient {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    .pl-overlay.pl-hidden {
         opacity: 0;
+        transform: scale(1.1);
         visibility: hidden;
         pointer-events: none;
-        transform: scale(1.05);
     }
 
-    .preloader-content {
+    /* Content container */
+    .pl-content {
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 24px;
+        gap: 32px;
         position: relative;
     }
 
-    /* Premium Spinner Design */
-    .preloader-visual {
+    /* Floating Logo Animation */
+    .pl-logo-wrap {
         position: relative;
-        width: 80px;
-        height: 80px;
+        width: 120px;
+        height: 120px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: pl-float 3s ease-in-out infinite;
     }
 
-    .preloader-ring {
+    .pl-logo-icon {
+        font-size: 4rem;
+        color: var(--pl-accent);
+        filter: drop-shadow(0 0 20px var(--pl-glow));
+        position: relative;
+        z-index: 2;
+    }
+
+    /* Glowing Rings */
+    .pl-ring {
         position: absolute;
         inset: 0;
-        border: 4px solid rgba(59, 130, 246, 0.1);
+        border: 2px solid transparent;
+        border-top-color: var(--pl-accent);
         border-radius: 50%;
+        animation: pl-spin 2s linear infinite;
+        opacity: 0.4;
     }
 
-    .preloader-ring-active {
+    .pl-ring-inner {
         position: absolute;
-        inset: 0;
-        border: 4px solid transparent;
-        border-top-color: var(--preloader-accent);
+        inset: 15px;
+        border: 2px solid transparent;
+        border-bottom-color: var(--pl-accent);
         border-radius: 50%;
-        animation: preloader-spin 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+        animation: pl-spin 1.5s linear infinite reverse;
+        opacity: 0.3;
     }
 
-    .preloader-orb {
+    /* Shimmer Effect */
+    .pl-shimmer {
         position: absolute;
-        inset: 20px;
-        background: linear-gradient(135deg, var(--preloader-accent), #60a5fa);
-        border-radius: 50%;
-        filter: blur(12px);
-        opacity: 0.6;
-        animation: preloader-pulse 2s ease-in-out infinite;
+        inset: -20px;
+        background: radial-gradient(circle, var(--pl-glow) 0%, transparent 70%);
+        animation: pl-pulse 2s ease-in-out infinite;
+        z-index: 1;
     }
 
-    .preloader-text {
+    /* Loading Text */
+    .pl-text {
         font-family: 'Inter', 'Poppins', sans-serif;
-        font-size: 1.1rem;
-        font-weight: 600;
-        color: var(--preloader-text);
-        letter-spacing: 2px;
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: var(--pl-text);
+        letter-spacing: 4px;
         text-transform: uppercase;
         display: flex;
         align-items: center;
+        gap: 8px;
+        opacity: 0.8;
+    }
+
+    .pl-dots {
+        display: flex;
         gap: 4px;
     }
 
-    .preloader-dots span {
-        animation: preloader-dots 1.5s infinite;
-        display: inline-block;
+    .pl-dot {
+        width: 4px;
+        height: 4px;
+        background: var(--pl-accent);
+        border-radius: 50%;
+        animation: pl-dots 1.4s infinite;
     }
 
-    .preloader-dots span:nth-child(2) { animation-delay: 0.2s; }
-    .preloader-dots span:nth-child(3) { animation-delay: 0.4s; }
+    .pl-dot:nth-child(2) { animation-delay: 0.2s; }
+    .pl-dot:nth-child(3) { animation-delay: 0.4s; }
 
-    @keyframes preloader-spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
+    /* Keyframes */
+    @keyframes pl-spin {
+        to { transform: rotate(360deg); }
     }
 
-    @keyframes preloader-pulse {
-        0%, 100% { transform: scale(0.8); opacity: 0.4; }
-        50% { transform: scale(1.1); opacity: 0.7; }
+    @keyframes pl-float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-15px); }
     }
 
-    @keyframes preloader-dots {
-        0%, 20% { opacity: 0; transform: translateY(0); }
-        50% { opacity: 1; transform: translateY(-3px); }
-        80%, 100% { opacity: 0; transform: translateY(0); }
+    @keyframes pl-pulse {
+        0%, 100% { transform: scale(0.8); opacity: 0.2; }
+        50% { transform: scale(1.2); opacity: 0.5; }
     }
 
-    /* Disable scroll utility */
-    .preloader-no-scroll {
-        overflow: hidden !important;
+    @keyframes pl-dots {
+        0%, 80%, 100% { transform: scale(0.6); opacity: 0.3; }
+        40% { transform: scale(1); opacity: 1; }
+    }
+
+    /* Blur-to-clear transition helper */
+    .pl-blur-content {
+        filter: blur(15px);
+        transition: filter 1s ease;
     }
 </style>
 
-<div id="global-preloader" class="preloader-overlay">
-    <div class="preloader-content">
-        <div class="preloader-visual">
-            <div class="preloader-ring"></div>
-            <div class="preloader-ring-active"></div>
-            <div class="preloader-orb"></div>
+<div id="pl-root" class="pl-overlay">
+    <div class="pl-content">
+        <div class="pl-logo-wrap">
+            <div class="pl-shimmer"></div>
+            <div class="pl-ring"></div>
+            <div class="pl-ring-inner"></div>
+            <i class="fa-solid fa-car-side pl-logo-icon"></i>
         </div>
-        <div class="preloader-text">
-            Loading
-            <div class="preloader-dots">
-                <span>.</span><span>.</span><span>.</span>
+        <div class="pl-text">
+            Loading Experience
+            <div class="pl-dots">
+                <div class="pl-dot"></div>
+                <div class="pl-dot"></div>
+                <div class="pl-dot"></div>
             </div>
         </div>
     </div>
@@ -143,54 +193,73 @@
 
 <script>
 (function() {
-    const preloader = document.getElementById('global-preloader');
+    const plRoot = document.getElementById('pl-root');
     
-    // Environment Check: Disable for localhost/127.0.0.1
-    const hostname = window.location.hostname;
-    const isLocal = hostname === "localhost" || hostname === "127.0.0.1" || hostname.startsWith("192.168.");
-    
-    if (isLocal) {
-        preloader.style.display = 'none';
+    // Environment Control
+    const isProd = window.location.hostname !== "localhost" && 
+                   window.location.hostname !== "127.0.0.1" && 
+                   !window.location.hostname.startsWith("192.168.");
+
+    if (!isProd) {
+        plRoot.style.display = 'none';
         return;
     }
 
-    // Set theme for preloader immediately
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    document.documentElement.setAttribute('data-theme', savedTheme);
+    // Lock Scroll
+    document.documentElement.style.overflow = 'hidden';
+    
+    // Initial State: Apply blur to body children (except preloader)
+    const blurElements = () => {
+        Array.from(document.body.children).forEach(el => {
+            if (el !== plRoot && el.tagName !== 'SCRIPT') {
+                el.classList.add('pl-blur-content');
+            }
+        });
+    };
 
-    // Initial state: Disable scroll
-    document.documentElement.classList.add('preloader-no-scroll');
-
-    // Smart Exit: Wait for window load (all assets + components)
+    // Wait for full load
     window.addEventListener('load', function() {
-        // Minimum visibility time to ensure the animation is seen and feels premium
-        // but only if it's very fast. If it takes longer than 500ms, hide immediately.
+        const minDisplayTime = 800; // Ensure premium feel
         const startTime = performance.now();
-        
-        const hidePreloader = () => {
-            preloader.classList.add('preloader-hidden');
-            document.documentElement.classList.remove('preloader-no-scroll');
-            
-            // Clean up DOM after transition
+
+        const exitLoader = () => {
+            // Remove blur
+            Array.from(document.body.children).forEach(el => {
+                if (el.classList.contains('pl-blur-content')) {
+                    el.style.filter = 'none';
+                }
+            });
+
+            // Hide preloader
+            plRoot.classList.add('pl-hidden');
+            document.documentElement.style.overflow = '';
+
             setTimeout(() => {
-                preloader.style.display = 'none';
-            }, 600);
+                plRoot.style.display = 'none';
+            }, 800);
         };
 
-        const loadTime = performance.now() - startTime;
-        if (loadTime < 500) {
-            setTimeout(hidePreloader, 500 - loadTime);
+        const elapsed = performance.now() - startTime;
+        if (elapsed < minDisplayTime) {
+            setTimeout(exitLoader, minDisplayTime - elapsed);
         } else {
-            hidePreloader();
+            exitLoader();
         }
     });
 
-    // Safety timeout: If load takes too long (e.g. 8s), force hide
+    // Proactive blur before assets load
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', blurElements);
+    } else {
+        blurElements();
+    }
+
+    // Safety force-hide after 10s
     setTimeout(() => {
-        if (!preloader.classList.contains('preloader-hidden')) {
-            document.documentElement.classList.remove('preloader-no-scroll');
-            preloader.classList.add('preloader-hidden');
+        if (plRoot.style.display !== 'none') {
+            plRoot.classList.add('pl-hidden');
+            document.documentElement.style.overflow = '';
         }
-    }, 8000);
+    }, 10000);
 })();
 </script>
