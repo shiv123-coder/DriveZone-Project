@@ -1,265 +1,333 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%-- 
-    Advanced Global Preloader Component
-    Features:
-    1. Production-only hostname detection
-    2. Premium Animated Gradient Background
-    3. Floating Car Logo Animation
-    4. Shimmer & Glow Effects
-    5. Blur-to-Clear Exit Transition
+    PREMIUM PRODUCTION PRELOADER
+    - Production-only execution
+    - Dark Glassmorphic Design
+    - SVG Noise/Grain Texture
+    - Rotating Gradient Rings & Pulsing Energy Core
+    - Smart Loading Logic with Promise Tracking
 --%>
 <style>
     :root {
-        --pl-bg-1: #0f172a;
-        --pl-bg-2: #1e293b;
+        --pl-bg: #030712;
         --pl-accent: #3b82f6;
-        --pl-glow: rgba(59, 130, 246, 0.5);
-        --pl-text: #f8fafc;
+        --pl-accent-glow: rgba(59, 130, 246, 0.5);
+        --pl-energy: #60a5fa;
+        --pl-text: rgba(255, 255, 255, 0.7);
     }
 
-    [data-theme="light"] {
-        --pl-bg-1: #f8fafc;
-        --pl-bg-2: #f1f5f9;
-        --pl-accent: #1a56db;
-        --pl-glow: rgba(26, 86, 219, 0.3);
-        --pl-text: #1e293b;
-    }
-
-    /* Full screen overlay with animated gradient */
-    .pl-overlay {
+    /* Core Overlay */
+    #pl-root {
         position: fixed;
         inset: 0;
         width: 100%;
         height: 100%;
-        background: linear-gradient(-45deg, var(--pl-bg-1), var(--pl-bg-2), var(--pl-bg-1));
-        background-size: 400% 400%;
-        animation: pl-gradient 15s ease infinite;
+        background: var(--pl-bg);
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        z-index: 100000;
-        transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), 
-                    transform 0.8s cubic-bezier(0.4, 0, 0.2, 1),
-                    visibility 0.8s;
+        z-index: 999999;
+        overflow: hidden;
+        transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+                    transform 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+                    visibility 0.6s;
     }
 
-    @keyframes pl-gradient {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
-    }
-
-    .pl-overlay.pl-hidden {
-        opacity: 0;
-        transform: scale(1.1);
-        visibility: hidden;
+    /* Radial Glow Background */
+    .pl-glow {
+        position: absolute;
+        width: 150%;
+        height: 150%;
+        background: radial-gradient(circle at center, rgba(37, 99, 235, 0.15) 0%, transparent 50%);
+        animation: pl-glow-pulse 8s ease-in-out infinite alternate;
         pointer-events: none;
     }
 
-    /* Content container */
-    .pl-content {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 32px;
-        position: relative;
+    /* Grain Texture Overlay */
+    .pl-noise {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.04;
+        pointer-events: none;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
     }
 
-    /* Floating Logo Animation */
-    .pl-logo-wrap {
+    /* Center Container */
+    .pl-visual {
         position: relative;
-        width: 120px;
-        height: 120px;
+        width: 180px;
+        height: 180px;
         display: flex;
         align-items: center;
         justify-content: center;
-        animation: pl-float 3s ease-in-out infinite;
+        margin-bottom: 40px;
+        animation: pl-float 4s ease-in-out infinite;
     }
 
-    .pl-logo-icon {
-        font-size: 4rem;
-        color: var(--pl-accent);
-        filter: drop-shadow(0 0 20px var(--pl-glow));
-        position: relative;
-        z-index: 2;
-    }
-
-    /* Glowing Rings */
-    .pl-ring {
+    /* Rotating Gradient Rings */
+    .pl-ring-outer {
         position: absolute;
         inset: 0;
-        border: 2px solid transparent;
-        border-top-color: var(--pl-accent);
         border-radius: 50%;
-        animation: pl-spin 2s linear infinite;
-        opacity: 0.4;
+        padding: 2px;
+        background: linear-gradient(0deg, transparent 30%, var(--pl-accent) 100%);
+        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        animation: pl-spin 2s cubic-bezier(0.45, 0, 0.55, 1) infinite;
     }
 
-    .pl-ring-inner {
+    .pl-ring-mid {
         position: absolute;
         inset: 15px;
-        border: 2px solid transparent;
-        border-bottom-color: var(--pl-accent);
         border-radius: 50%;
-        animation: pl-spin 1.5s linear infinite reverse;
-        opacity: 0.3;
+        padding: 2px;
+        background: linear-gradient(180deg, transparent 30%, var(--pl-energy) 100%);
+        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        animation: pl-spin 3s cubic-bezier(0.45, 0, 0.55, 1) infinite reverse;
+        opacity: 0.6;
     }
 
-    /* Shimmer Effect */
-    .pl-shimmer {
+    /* Energy Core */
+    .pl-core {
+        position: relative;
+        width: 60px;
+        height: 60px;
+        background: var(--pl-energy);
+        border-radius: 50%;
+        filter: blur(1px);
+        box-shadow: 0 0 30px var(--pl-accent-glow), 0 0 60px var(--pl-accent-glow);
+        animation: pl-core-pulse 2s ease-in-out infinite;
+    }
+
+    .pl-core::after {
+        content: '';
         position: absolute;
-        inset: -20px;
-        background: radial-gradient(circle, var(--pl-glow) 0%, transparent 70%);
-        animation: pl-pulse 2s ease-in-out infinite;
-        z-index: 1;
+        inset: -10px;
+        border-radius: 50%;
+        border: 1px solid rgba(96, 165, 250, 0.3);
+        animation: pl-ripple 2s ease-out infinite;
+    }
+
+    /* Particle Specks */
+    .pl-particle {
+        position: absolute;
+        background: #fff;
+        border-radius: 50%;
+        opacity: 0.3;
+        pointer-events: none;
     }
 
     /* Loading Text */
-    .pl-text {
-        font-family: 'Inter', 'Poppins', sans-serif;
-        font-size: 0.9rem;
-        font-weight: 700;
+    .pl-status {
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
         color: var(--pl-text);
-        letter-spacing: 4px;
+        font-size: 13px;
+        font-weight: 500;
+        letter-spacing: 0.15em;
         text-transform: uppercase;
         display: flex;
         align-items: center;
-        gap: 8px;
-        opacity: 0.8;
-    }
-
-    .pl-dots {
-        display: flex;
         gap: 4px;
+        animation: pl-fade-in 0.8s ease-out;
     }
 
-    .pl-dot {
-        width: 4px;
-        height: 4px;
-        background: var(--pl-accent);
-        border-radius: 50%;
-        animation: pl-dots 1.4s infinite;
+    .pl-dots span {
+        animation: pl-dots 1.4s infinite both;
+    }
+    .pl-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .pl-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+    /* Hidden State (Exit Animation) */
+    .pl-hidden {
+        opacity: 0 !important;
+        transform: scale(0.96) !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
     }
 
-    .pl-dot:nth-child(2) { animation-delay: 0.2s; }
-    .pl-dot:nth-child(3) { animation-delay: 0.4s; }
+    /* Blur helper for body content */
+    .pl-content-blur {
+        filter: blur(12px);
+        transition: filter 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
 
-    /* Keyframes */
+    /* Animations */
     @keyframes pl-spin {
+        from { transform: rotate(0deg); }
         to { transform: rotate(360deg); }
     }
 
-    @keyframes pl-float {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-15px); }
+    @keyframes pl-glow-pulse {
+        from { transform: scale(1) translate(-10%, -10%); opacity: 0.5; }
+        to { transform: scale(1.1) translate(0, 0); opacity: 0.8; }
     }
 
-    @keyframes pl-pulse {
-        0%, 100% { transform: scale(0.8); opacity: 0.2; }
-        50% { transform: scale(1.2); opacity: 0.5; }
+    @keyframes pl-float {
+        0%, 100% { transform: translateY(0) rotate(0deg); }
+        50% { transform: translateY(-10px) rotate(2deg); }
+    }
+
+    @keyframes pl-core-pulse {
+        0%, 100% { transform: scale(1); filter: blur(1px) brightness(1); }
+        50% { transform: scale(1.1); filter: blur(2px) brightness(1.3); }
+    }
+
+    @keyframes pl-ripple {
+        from { transform: scale(1); opacity: 1; }
+        to { transform: scale(2); opacity: 0; }
     }
 
     @keyframes pl-dots {
-        0%, 80%, 100% { transform: scale(0.6); opacity: 0.3; }
-        40% { transform: scale(1); opacity: 1; }
+        0%, 80%, 100% { opacity: 0.2; transform: translateY(0); }
+        40% { opacity: 1; transform: translateY(-2px); }
     }
 
-    /* Blur-to-clear transition helper */
-    .pl-blur-content {
-        filter: blur(15px);
-        transition: filter 1s ease;
+    @keyframes pl-fade-in {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
     }
 </style>
 
-<div id="pl-root" class="pl-overlay">
-    <div class="pl-content">
-        <div class="pl-logo-wrap">
-            <div class="pl-shimmer"></div>
-            <div class="pl-ring"></div>
-            <div class="pl-ring-inner"></div>
-            <i class="fa-solid fa-car-side pl-logo-icon"></i>
-        </div>
-        <div class="pl-text">
-            Loading Experience
-            <div class="pl-dots">
-                <div class="pl-dot"></div>
-                <div class="pl-dot"></div>
-                <div class="pl-dot"></div>
-            </div>
+<div id="pl-root">
+    <div class="pl-glow"></div>
+    <div class="pl-noise"></div>
+    
+    <!-- Floating Particles (Generated by JS) -->
+    <div id="pl-particles"></div>
+
+    <div class="pl-visual">
+        <div class="pl-ring-outer"></div>
+        <div class="pl-ring-mid"></div>
+        <div class="pl-core"></div>
+    </div>
+
+    <div class="pl-status">
+        Loading experience
+        <div class="pl-dots">
+            <span>.</span><span>.</span><span>.</span>
         </div>
     </div>
 </div>
 
 <script>
-(function() {
-    const plRoot = document.getElementById('pl-root');
-    
-    // Environment Control
-    const isProd = window.location.hostname !== "localhost" && 
-                   window.location.hostname !== "127.0.0.1" && 
-                   !window.location.hostname.startsWith("192.168.");
+window.Preloader = (function() {
+    const root = document.getElementById('pl-root');
+    const particlesContainer = document.getElementById('pl-particles');
+    const minDisplayTime = 400; // Premium feel threshold
+    const startTime = performance.now();
+    let trackedPromises = [];
 
-    if (!isProd) {
-        plRoot.style.display = 'none';
-        return;
+    // 1. Environment Check (Production Only)
+    const isDev = window.location.hostname === 'localhost' || 
+                  window.location.hostname === '127.0.0.1' || 
+                  window.location.hostname.startsWith('192.168.');
+
+    if (isDev) {
+        root.style.display = 'none';
+        return { track: () => {} };
     }
 
-    // Lock Scroll
-    document.documentElement.style.overflow = 'hidden';
-    
-    // Initial State: Apply blur to body children (except preloader)
-    const blurElements = () => {
+    // 2. Initialize Visuals
+    function initParticles() {
+        for (let i = 0; i < 15; i++) {
+            const p = document.createElement('div');
+            p.className = 'pl-particle';
+            const size = Math.random() * 3 + 1;
+            p.style.width = size + 'px';
+            p.style.height = size + 'px';
+            p.style.left = Math.random() * 100 + '%';
+            p.style.top = Math.random() * 100 + '%';
+            p.style.animation = 'pl-fade-in ' + (Math.random() * 3 + 2) + 's infinite alternate';
+            particlesContainer.appendChild(p);
+        }
+    }
+
+    // 3. UX Management
+    function lockScroll() {
+        document.documentElement.style.overflow = 'hidden';
+        document.body.style.pointerEvents = 'none';
+    }
+
+    function unlockScroll() {
+        document.documentElement.style.overflow = '';
+        document.body.style.pointerEvents = '';
+    }
+
+    function applyBlur() {
         Array.from(document.body.children).forEach(el => {
-            if (el !== plRoot && el.tagName !== 'SCRIPT') {
-                el.classList.add('pl-blur-content');
+            if (el !== root && el.tagName !== 'SCRIPT' && el.tagName !== 'LINK') {
+                el.classList.add('pl-content-blur');
             }
         });
+    }
+
+    function removeBlur() {
+        Array.from(document.body.children).forEach(el => {
+            el.classList.remove('pl-content-blur');
+        });
+    }
+
+    // 4. Smart Loading Logic
+    const exit = () => {
+        const elapsed = performance.now() - startTime;
+        const delay = Math.max(0, minDisplayTime - elapsed);
+
+        setTimeout(() => {
+            removeBlur();
+            root.classList.add('pl-hidden');
+            unlockScroll();
+
+            // Cleanup DOM after animation
+            setTimeout(() => {
+                root.style.display = 'none';
+            }, 600);
+        }, delay);
     };
 
-    // Wait for full load
-    window.addEventListener('load', function() {
-        const minDisplayTime = 800; // Ensure premium feel
-        const startTime = performance.now();
+    // Public API
+    const api = {
+        track: (promise) => {
+            if (promise && typeof promise.then === 'function') {
+                trackedPromises.push(promise);
+            }
+        }
+    };
 
-        const exitLoader = () => {
-            // Remove blur
-            Array.from(document.body.children).forEach(el => {
-                if (el.classList.contains('pl-blur-content')) {
-                    el.style.filter = 'none';
-                }
-            });
+    // Execution
+    lockScroll();
+    initParticles();
+    
+    // Auto-blur content once DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', applyBlur);
+    } else {
+        applyBlur();
+    }
 
-            // Hide preloader
-            plRoot.classList.add('pl-hidden');
-            document.documentElement.style.overflow = '';
-
-            setTimeout(() => {
-                plRoot.style.display = 'none';
-            }, 800);
-        };
-
-        const elapsed = performance.now() - startTime;
-        if (elapsed < minDisplayTime) {
-            setTimeout(exitLoader, minDisplayTime - elapsed);
+    // Wait for Window Load + Tracked Promises
+    window.addEventListener('load', () => {
+        if (trackedPromises.length === 0) {
+            exit();
         } else {
-            exitLoader();
+            Promise.allSettled(trackedPromises).then(exit);
         }
     });
 
-    // Proactive blur before assets load
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', blurElements);
-    } else {
-        blurElements();
-    }
-
-    // Safety force-hide after 10s
+    // Safety force-hide (10s limit)
     setTimeout(() => {
-        if (plRoot.style.display !== 'none') {
-            plRoot.classList.add('pl-hidden');
-            document.documentElement.style.overflow = '';
+        if (root.style.display !== 'none') {
+            exit();
         }
     }, 10000);
+
+    return api;
 })();
 </script>
