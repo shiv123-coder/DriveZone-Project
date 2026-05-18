@@ -161,3 +161,5 @@ http://localhost:8080/DriveZone
 Enterprise Java Web Application
 
 </div>
+To check DB service is on or off - http://console.aiven.io/account/a5aea60f7e0f/project/shivashankrmali7-a1b2/services/drivezone-db/overview
+
