@@ -19,9 +19,9 @@ if ("POST".equalsIgnoreCase(request.getMethod())) {
         alertIcon = "error";
         alertTitle = "Missing Details";
         alertText = "Please enter email or username and password.";
-    } else if (System.getenv("ADMIN_USER") != null && System.getenv("ADMIN_PASS") != null && 
-               System.getenv("ADMIN_USER").equals(emailOrUsername) && System.getenv("ADMIN_PASS").equals(password)) {
-        session.setAttribute("user", System.getenv("ADMIN_USER"));
+    } else if (DBConnection.getEnv().get("ADMIN_USER") != null && DBConnection.getEnv().get("ADMIN_PASS") != null && 
+               DBConnection.getEnv().get("ADMIN_USER").equals(emailOrUsername) && DBConnection.getEnv().get("ADMIN_PASS").equals(password)) {
+        session.setAttribute("user", DBConnection.getEnv().get("ADMIN_USER"));
         session.setAttribute("role", "admin");
         alertIcon = "success";
         alertTitle = "Welcome Admin!";
@@ -45,7 +45,7 @@ if ("POST".equalsIgnoreCase(request.getMethod())) {
                 );
                 ps.setString(1, emailOrUsername);
                 ps.setString(2, emailOrUsername);
-                ps.setString(3, password);
+                ps.setString(3, utils.SecurityUtils.hashPassword(password));
 
                 rs = ps.executeQuery();
 

@@ -14,9 +14,9 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 INSERT INTO users (username, email, password) VALUES
-('Shiv Mali', 'shivashankrmali7@gmail.com', 'Swap@123'),
-('Swapil', 's@gmail.com', '123456'),
-('Shiv mali', 'SHivmali@gmail.com', 'Shiv');
+('Shiv Mali', 'shivashankrmali7@gmail.com', '648bdf0d0b6f9f16d04b3a8ec69f16194571ee027d166e452071dfb079ef5870'), -- Swap@123
+('Swapil', 's@gmail.com', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92'), -- 123456
+('Shiv mali', 'SHivmali@gmail.com', '0e282575cc2b8e7fc9802e77cf7b6a55931776d9df8f246b925fd8f03837fc5a'); -- Shiv
 
 CREATE TABLE IF NOT EXISTS cars (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -59,6 +59,11 @@ CREATE TABLE IF NOT EXISTS enquiries (
 
 INSERT INTO enquiries (car_id, user_name, user_email, message, status) VALUES
 (1,'Shiv Mali','shivashankrmali7@gmail.com','Interested in car','Pending');
+
+-- Add Performance Indexes
+CREATE INDEX idx_cars_status ON cars(status);
+CREATE INDEX idx_cars_brand ON cars(brand);
+CREATE INDEX idx_enquiries_status ON enquiries(status);
 
 --- for deployed db access 
 ''' mysql -h drivezone-db-shivashankrmali7-a1b2.l.aivencloud.com -P 20314 -u avnadmin -p --ssl-mode=REQUIRED defaultdb

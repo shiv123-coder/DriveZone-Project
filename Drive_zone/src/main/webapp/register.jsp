@@ -462,7 +462,7 @@ Swal.fire({
                     ps = con.prepareStatement("INSERT INTO users (username, email, password) VALUES (?, ?, ?)");
                     ps.setString(1, username);
                     ps.setString(2, email);
-                    ps.setString(3, password);
+                    ps.setString(3, utils.SecurityUtils.hashPassword(password));
 
                     int result = ps.executeUpdate();
 

@@ -21,8 +21,8 @@
 
 <%
     String adminUser = (String) session.getAttribute("user");
-    if (adminUser == null || 
-       (!"SSP".equalsIgnoreCase(adminUser) && !"admin".equalsIgnoreCase(adminUser))) {
+    String role = (String) session.getAttribute("role");
+    if (adminUser == null || !"admin".equals(role)) {
         response.sendRedirect("LogoutServlet");
         return;
     }
@@ -32,23 +32,25 @@
     int pendingEnquiries = 0;
     int activeListings = 0;
 
-    try (Connection conStat = DBConnection.getConnection();
-         Statement stStat = conStat.createStatement()) {
+    try (Connection conStat = DBConnection.getConnection()) {
 
-        try (ResultSet rsStat = stStat.executeQuery("SELECT COUNT(*) FROM cars")) {
+        try (PreparedStatement ps = conStat.prepareStatement("SELECT COUNT(*) FROM cars");
+             ResultSet rsStat = ps.executeQuery()) {
             if (rsStat.next()) {
                 totalCars = rsStat.getInt(1);
                 activeListings = totalCars;
             }
         }
 
-        try (ResultSet rsStat = stStat.executeQuery("SELECT COUNT(*) FROM enquiries")) {
+        try (PreparedStatement ps = conStat.prepareStatement("SELECT COUNT(*) FROM enquiries");
+             ResultSet rsStat = ps.executeQuery()) {
             if (rsStat.next()) {
                 totalEnquiries = rsStat.getInt(1);
             }
         }
 
-        try (ResultSet rsStat = stStat.executeQuery("SELECT COUNT(*) FROM enquiries WHERE status='Pending'")) {
+        try (PreparedStatement ps = conStat.prepareStatement("SELECT COUNT(*) FROM enquiries WHERE status='Pending'");
+             ResultSet rsStat = ps.executeQuery()) {
             if (rsStat.next()) {
                 pendingEnquiries = rsStat.getInt(1);
             }

@@ -16,8 +16,8 @@
 
 <%
     String adminUser = (String) session.getAttribute("user");
-    if (adminUser == null || 
-       (!"SSP".equalsIgnoreCase(adminUser) && !"admin".equalsIgnoreCase(adminUser))) {
+    String role = (String) session.getAttribute("role");
+    if (adminUser == null || !"admin".equals(role)) {
         response.sendRedirect("LogoutServlet");
         return;
     }

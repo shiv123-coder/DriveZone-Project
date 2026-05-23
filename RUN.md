@@ -62,5 +62,10 @@ CREATE TABLE enquiries (
 2.  Select your configured Tomcat server and click **Finish**.
 3.  The application will build and open in your default browser at `http://localhost:8080/Drive_zone/home.jsp` (or similar depending on your Tomcat port).
 
+### Secure Setup & Environment Variables
+1. Create a `.env` file in the root directory (you can copy from `.env.example`).
+2. Set your `DB_URL`, `DB_USER`, `DB_PASS`, `ADMIN_USER`, and `ADMIN_PASS`.
+3. If deploying to production, set `STORAGE_PATH` to an external directory to prevent uploads from being deleted upon redeployment.
+
 ### Important Default Accounts
-*   **Admin Access**: Register an account with the username `SSP` or `admin`. Only these users are permitted to access `admin.jsp` and `editCar.jsp`.
+*   **Admin Access**: The default admin password hash in `setup_instructions.sql` is generated using SHA-256 for better security. Make sure to define `ADMIN_USER` and `ADMIN_PASS` in your `.env` to match your desired credentials before starting.

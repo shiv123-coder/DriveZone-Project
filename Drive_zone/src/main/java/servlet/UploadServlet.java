@@ -58,10 +58,21 @@ public class UploadServlet extends HttpServlet {
             return;
         }
 
+        // Validate MIME type
+        String mimeType = getServletContext().getMimeType(originalFileName);
+        if (mimeType == null || !mimeType.startsWith("image/")) {
+            response.sendRedirect("admin.jsp?error=invalid_type");
+            return;
+        }
+
         // Generate safe unique filename
         String safeFileName = UUID.randomUUID().toString() + extension;
 
-        String uploadPath = getServletContext().getRealPath("/") + "uploads";
+        String storagePathEnv = DBConnection.getEnv().get("STORAGE_PATH");
+        String uploadPath = storagePathEnv != null && !storagePathEnv.isEmpty() ? 
+                            storagePathEnv : 
+                            getServletContext().getRealPath("/") + "uploads";
+                            
         File uploadDir = new File(uploadPath);
         if (!uploadDir.exists()) uploadDir.mkdirs();
 
