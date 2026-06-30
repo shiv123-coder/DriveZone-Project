@@ -1,4 +1,5 @@
 # Ignore Maven build artifacts
+.env.example
 target/
 pom.xml.tag
 pom.xml.releaseBackup
@@ -61,3 +62,4 @@ Drive_zone/src/main/webapp/uploads/*
 WT-miniproject-report_format.docx
 DBMS_Mini_Project___Tourism_Management_System.pdfdrivezone_interview_qa.md 
 drivezone_interview_qa.pdf 
+drivezone_interview_qa.md
